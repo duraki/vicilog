@@ -22,34 +22,31 @@ require 'fileutils'
 @def_build  = "14. Nov 2015."
 
 def print_header
-	@header = "Vicilog v " + @def_ver + " // Changelog / Buildtool"
-	@line1  = " _    __________________    ____  ______"
-	@line2  = "| |  / /  _/ ____/  _/ /   / __ \\/ ____/"
-	@line3  = "| | / // // /    / // /   / / / / / __  "
-	@line4  = "| |/ // // /____/ // /___/ /_/ / /_/ /  "
-	@line5  = "|___/___/\\____/___/_____/\\____/\\____/   "
-                                              
-    puts @line1
-    puts @line2
-    puts @line3
-    puts @line4
-    puts @line5
-    puts ""
-    puts @header
-    puts "https://github.com/dn5/vicilog"
-    puts "Use argument --help for details"
-    puts ""
+	puts <<EOL
+_    __________________    ____  ______
+| |  / /  _/ ____/  _/ /   / __ \\/ ____/
+| | / // // /    / // /   / / / / / __  
+| |/ // // /____/ // /___/ /_/ / /_/ /  
+|___/___/\\____/___/_____/\\____/\\____/
+
+Vicilog v #{@def_ver} // Changelog / Buildtool
+https://github.com/dn5/vicilog
+Use argument --help for details
+EOL
+
 end
 
 def print_help
-	puts "$ ruby vicilog.rb --help | usage / this menu"
-	puts "$ ruby vicilog.rb --new  | new project"
-	puts "                  --new    project_name"
-	puts "$ ruby vicilog.rb --comp | compile / new build"
-	puts "$ ruby vicilog.rb --comp   project_name"
-	puts "$ ruby vicilog.rb --abt  | about the project"
-	puts "$ ruby vicilog.rb --v    | version info"
-	puts "$ ruby vicilog.rb --tag  | for tag list"
+	puts <<EOL
+$ ruby vicilog.rb --help | usage / this menu
+$ ruby vicilog.rb --new  | new project
+                  --new    project_name
+$ ruby vicilog.rb --comp | compile / new build
+$ ruby vicilog.rb --comp   project_name
+$ ruby vicilog.rb --abt  | about the project
+$ ruby vicilog.rb --v    | version info
+$ ruby vicilog.rb --tag  | for tag list
+EOL
 end
 
 # Read JSON file
@@ -168,23 +165,27 @@ print_header
 			puts "./vicilog.rb --new best_project_in_teh_world"
 		end
 	when "--abt"
-		puts "[+] About Vicilog [+]"
-		puts "Author 	    : Coded by dn5 @ tuxbox_uni" 
-		puts "Website	    : https://github.com/dn5/vicilog"
-		puts "Usage 	    : Use Vicilog to make beautiful changelog / buildlogs and display them in HTML"
-		puts "Inspiration : Github, actually. Template stolen from GitHub changelog :p"
-		puts "Creditzz    : Ox0dea from #ruby @ freenode"
-		puts "Follow me   : @dn5__ (Twitter) [+] @dn5 (GitHub)"
+		puts <<EOL
+[+] About Vicilog [+]
+Author 	    : Coded by dn5 @ tuxbox_uni 
+Website	    : https://github.com/dn5/vicilog
+Usage 	    : Use Vicilog to make beautiful changelog / buildlogs and display them in HTML
+Inspiration : Github, actually. Template stolen from GitHub changelog :p
+Creditzz    : Ox0dea from #ruby @ freenode
+Follow me   : @dn5__ (Twitter) [+] @dn5 (GitHub)
+EOL
 	when "--tag"
-		puts "[+] Available tags [+]"
-		puts "	new 			| for new functionality"
-		puts "	fixed 			| for fixed functions or bugs"
-		puts "	improved 		| for improved functions"
-		puts "	removed 		| for removed functions or bugs"
-		puts "	added 			| for new availability"
-		puts "[+] Usage [+]"
-		puts "Use the tags in brackets when adding e.g."
-		puts "[fixed] Memory leak @ onLoad() function"
+		puts <<EOL
+[+] Available tags [+]
+	new 			| for new functionality
+	fixed 			| for fixed functions or bugs
+	improved 		| for improved functions
+	removed 		| for removed functions or bugs
+	added 			| for new availability
+[+] Usage [+]
+Use the tags in brackets when adding e.g.
+[fixed] Memory leak @ onLoad() function
+EOL
 	when "--comp"
 		if ARGV.length == 2
 			write_json_from_txt(@arguments[1]) #arg1 = folder
