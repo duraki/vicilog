@@ -22,31 +22,34 @@ require 'fileutils'
 @def_build  = "14. Nov 2015."
 
 def print_header
-	puts <<EOL
-_    __________________    ____  ______
-| |  / /  _/ ____/  _/ /   / __ \\/ ____/
-| | / // // /    / // /   / / / / / __  
-| |/ // // /____/ // /___/ /_/ / /_/ /  
-|___/___/\\____/___/_____/\\____/\\____/
-
-Vicilog v #{@def_ver} // Changelog / Buildtool
-https://github.com/dn5/vicilog
-Use argument --help for details
-EOL
-
+	@header = "Vicilog v " + @def_ver + " // Changelog / Buildtool"
+	@line1  = " _    __________________    ____  ______"
+	@line2  = "| |  / /  _/ ____/  _/ /   / __ \\/ ____/"
+	@line3  = "| | / // // /    / // /   / / / / / __  "
+	@line4  = "| |/ // // /____/ // /___/ /_/ / /_/ /  "
+	@line5  = "|___/___/\\____/___/_____/\\____/\\____/   "
+                                              
+    puts @line1
+    puts @line2
+    puts @line3
+    puts @line4
+    puts @line5
+    puts ""
+    puts @header
+    puts "https://github.com/dn5/vicilog"
+    puts "Use argument --help for details"
+    puts ""
 end
 
 def print_help
-	puts <<EOL
-$ ruby vicilog.rb --help | usage / this menu
-$ ruby vicilog.rb --new  | new project
-                  --new    project_name
-$ ruby vicilog.rb --comp | compile / new build
-$ ruby vicilog.rb --comp   project_name
-$ ruby vicilog.rb --abt  | about the project
-$ ruby vicilog.rb --v    | version info
-$ ruby vicilog.rb --tag  | for tag list
-EOL
+	puts "$ ruby vicilog.rb --help | usage / this menu"
+	puts "$ ruby vicilog.rb --new  | new project"
+	puts "                  --new    project_name"
+	puts "$ ruby vicilog.rb --comp | compile / new build"
+	puts "$ ruby vicilog.rb --comp   project_name"
+	puts "$ ruby vicilog.rb --abt  | about the project"
+	puts "$ ruby vicilog.rb --v    | version info"
+	puts "$ ruby vicilog.rb --tag  | for tag list"
 end
 
 # Read JSON file
@@ -147,6 +150,24 @@ def new_project(str)
 	puts "New project sucesfully built! Run --comp project_name to compile new changes!"
 end
 
+def compile_data(prjname, info)
+	read_json(prjname + "/changes.json")
+	rb_hash = JSON.parse(@json)
+	rb_hash["overview"].unshift(info) 
+
+	#rb_hash.to_json
+	puts rb_hash
+	
+	@final_data = File.write(prjname + "/changes.json", rb_hash.to_json)
+end
+
+def compile_overview(prjname)
+	puts "Please, enter project informations and small overview."
+
+	@prj_overview = STDIN.gets.chomp
+	compile_data(prjname, @prj_overview)
+end
+
 print_header
 
 @arguments = ARGV
@@ -165,33 +186,36 @@ print_header
 			puts "./vicilog.rb --new best_project_in_teh_world"
 		end
 	when "--abt"
-		puts <<EOL
-[+] About Vicilog [+]
-Author 	    : Coded by dn5 @ tuxbox_uni 
-Website	    : https://github.com/dn5/vicilog
-Usage 	    : Use Vicilog to make beautiful changelog / buildlogs and display them in HTML
-Inspiration : Github, actually. Template stolen from GitHub changelog :p
-Creditzz    : Ox0dea from #ruby @ freenode
-Follow me   : @dn5__ (Twitter) [+] @dn5 (GitHub)
-EOL
+		puts "[+] About Vicilog [+]"
+		puts "Author 	    : Coded by dn5 @ tuxbox_uni" 
+		puts "Website	    : https://github.com/dn5/vicilog"
+		puts "Usage 	    : Use Vicilog to make beautiful changelog / buildlogs and display them in HTML"
+		puts "Inspiration : Github, actually. Template stolen from GitHub changelog :p"
+		puts "Creditzz    : Ox0dea from #ruby @ freenode"
+		puts "Follow me   : @dn5__ (Twitter) [+] @dn5 (GitHub)"
 	when "--tag"
-		puts <<EOL
-[+] Available tags [+]
-	new 			| for new functionality
-	fixed 			| for fixed functions or bugs
-	improved 		| for improved functions
-	removed 		| for removed functions or bugs
-	added 			| for new availability
-[+] Usage [+]
-Use the tags in brackets when adding e.g.
-[fixed] Memory leak @ onLoad() function
-EOL
+		puts "[+] Available tags [+]"
+		puts "	new 			| for new functionality"
+		puts "	fixed 			| for fixed functions or bugs"
+		puts "	improved 		| for improved functions"
+		puts "	removed 		| for removed functions or bugs"
+		puts "	added 			| for new availability"
+		puts "[+] Usage [+]"
+		puts "Use the tags in brackets when adding e.g."
+		puts "[fixed] Memory leak @ onLoad() function"
 	when "--comp"
 		if ARGV.length == 2
 			write_json_from_txt(@arguments[1]) #arg1 = folder
 		else
 			puts "Please, set a project name or make a new one."
 			puts "./vicilog.rb --comp best_project_in_teh_world"
+		end
+	when "--info"
+		if ARGV.length == 2
+			compile_overview(@arguments[1]) #arg1 = foler / project name
+		else
+			puts "You forgot your project. Try --info prjname."
+			puts "./vicilog.rb --info best_project_in_teh_world"
 		end
 	else
 		puts "Good to go!"
